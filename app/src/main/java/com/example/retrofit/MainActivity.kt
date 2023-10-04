@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.retrofit.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,11 +22,15 @@ class MainActivity : AppCompatActivity() {
 
     var postList = ArrayList<Posts>()
 
+    lateinit var adapter: postaAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         val view = mainBinding.root
         setContentView(view)
+
+        mainBinding.recyclerView.layoutManager = LinearLayoutManager(this)
 
         showPosts()
     }
@@ -41,7 +47,18 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<List<Posts>>{
             override fun onResponse(call: Call<List<Posts>>, response: Response<List<Posts>>) {
 
+                if(response.isSuccessful){
 
+                    mainBinding.progressBar.isVisible = false
+                    mainBinding.recyclerView.isVisible = true
+
+                    postList = response.body() as ArrayList<Posts>
+
+                    adapter = postaAdapter(postList)
+
+                    mainBinding.recyclerView.adapter = adapter
+
+                }
 
             }
 
