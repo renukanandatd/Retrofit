@@ -17,7 +17,9 @@ class MainActivity : AppCompatActivity() {
     private val baseURL = "https://jsonplaceholder.typicode.com/"
 
     lateinit var mainBinding: ActivityMainBinding
+
     var postList = ArrayList<Posts>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,19 +41,7 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<List<Posts>>{
             override fun onResponse(call: Call<List<Posts>>, response: Response<List<Posts>>) {
 
-                if(!response.isSuccessful){
-                    mainBinding.textViewUseId.text = "ERROR!!!"
-                    mainBinding.textViewId.text = "ERROR!!!"
-                    mainBinding.textViewTitle.text = "ERROR!!!"
-                    mainBinding.textViewBody.text = "ERROR!!!"
-                }
 
-                postList = response.body() as ArrayList<Posts>
-
-                mainBinding.textViewUseId.text = postList[0].userId.toString()
-                mainBinding.textViewId.text = postList[0].id.toString()
-                mainBinding.textViewTitle.text = postList[0].title
-                mainBinding.textViewBody.text = postList[0].subTitle
 
             }
 
